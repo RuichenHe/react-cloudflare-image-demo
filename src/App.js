@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 function App() {
     const [uploadUrl, setUploadUrl] = useState('');
     const [imagePreview, setImagePreview] = useState(null);
+    const [imageURL, setImageURL] = useState(null);
     const handleChange = (event) => {
       if (event.target.files && event.target.files[0]) {
         const file = event.target.files[0];
@@ -14,6 +14,7 @@ function App() {
           setImagePreview(e.target.result);
         };
         reader.readAsDataURL(file);
+        setImageURL(null);
       }
     };
     const setCloudFlareUploadURL = async () => {
@@ -61,6 +62,7 @@ function App() {
         }
   
         const data = await response.json();
+        setImageURL(data.result.variants[0]);
         console.log('Upload successful, image public url:', data.result.variants[0]);
 
   
@@ -80,6 +82,7 @@ function App() {
           <input type="submit" />
         </form>
         {imagePreview && <img src={imagePreview} alt="Preview" style={{ maxWidth: '200px', maxHeight: '200px' }} />}
+        {imageURL && <a href={imageURL} target="_blank" rel="noopener noreferrer">Image url</a>}
       </div>
       
     
